@@ -21,6 +21,22 @@ public:
         ++size_;
     }
 
+    void addAnywhere(int position, T* value) override {
+        if (size_ >= CAPACITY) {
+            std::cout << "ArrayList is full. " << std::endl;
+            return;
+        }
+        if (position < 0 || position > size_ ) {
+            std::cout << "The position is out of range." << std::endl;
+            return;
+        }
+        for (int i = size_ ; i > position; i--) { // shifts every value starting at position one slot to the right
+            data_[i] = data_[i-1];
+        }
+        data_[position] = value; // assigns the now empty position with the value given in the parameter
+        size_++; // increases the array size
+    }
+
     void addBack(T* value) override {
         if (size_ >= CAPACITY) {
             std::cout << "ArrayList is full." << std::endl;
@@ -48,6 +64,7 @@ public:
         }
         return data_[0];
     }
+
 
     bool isEmpty() const override {
         return size_ == 0;
