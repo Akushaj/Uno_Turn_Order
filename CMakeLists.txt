@@ -13,4 +13,5 @@ add_executable(Uno_Turn_Order
         Node.h
         Player.h
         Stack.h
+        Player.h
 )
