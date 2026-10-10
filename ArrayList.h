@@ -86,6 +86,23 @@ public:
         }
     }
 
+    void concat(List<T>* other) override {
+        ArrayList<T>* src = dynamic_cast<ArrayList<T>*>(other);
+        if (src == nullptr) {
+            std::cout << "Type Mismatch in concat." << std::endl; // checks if the type is a match or not. If src is null pointer it means it is not a Arraylist but a LinkedList
+            return;
+        }
+        if (src->size_ + size_ > CAPACITY) { //
+            std::cout << "ArrayList has not enough capacity " << std::endl;
+            return;
+        }
+        for (int i = 0 ; i < src->size_ ; ++i) {
+            data_[size_ + i] = src->data_[i]; // concat the other arraylist on this arraylist
+        }
+        size_ = src->size_ + size_; // increasing the size of the arraylist
+        src->size_ = 0; // making the size of other 0
+    }
+
     T* getFront() const override {
         if (size_ == 0) {
             return nullptr;
