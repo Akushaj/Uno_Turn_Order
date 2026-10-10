@@ -74,6 +74,18 @@ public:
         --size_;
     }
 
+    void reverse() override {
+        int left = 0;
+        int right = size_ - 1;
+        while ( left < right ) {
+            T* temp = data_[left];
+            data_[left] = data_[right];
+            data_[right] = temp;
+            ++left;
+            --right;
+        }
+    }
+
     T* getFront() const override {
         if (size_ == 0) {
             return nullptr;
