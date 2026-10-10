@@ -58,6 +58,22 @@ public:
         --size_;
     }
 
+    void deleteAnywhere(int position) override {
+        if (size_ == 0 ) {
+            std::cout << "ArrayList is empty." << std::endl;
+            return;
+        }
+        if (position < 0 || position >= size_) {
+            std::cout << "The position is out of range." << std::endl;
+            return;
+        }
+        delete data_[position]; // freeing the T itself at position
+        for (int i = position ; i < size_-1; ++i) { // shifting the array left while copying the values from the right
+            data_[i] = data_[i + 1];
+        }
+        --size_;
+    }
+
     T* getFront() const override {
         if (size_ == 0) {
             return nullptr;
