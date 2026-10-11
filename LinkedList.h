@@ -82,6 +82,31 @@ public:
         head_ = prev;
     }
 
+    void concat(List<T>* other) override {
+        LinkedList<T>* src = dynamic_cast<LinkedList<T>*>(other);
+
+        if (src == nullptr) {
+            std::cout << "Type mismatch in concat." << std::endl;
+            return;
+        }
+
+        if (src->head_ == nullptr) {
+            return;
+        }
+        
+        if (head_ == nullptr) {
+            head_ = src->head_;
+        }else {
+            tail_->next = src->head_;
+        }
+        tail_ = src->tail_;
+        size_ += src->size_;
+        src->head_ = nullptr;
+        src->tail_ = nullptr;
+        src->size_ = 0;
+
+    }
+
     void addBack(T* value) override {
         Node<T>* fresh = new Node<T>(value);
         if (tail_ == nullptr) {
