@@ -35,13 +35,37 @@ public:
             return;
         }
         Node<T>* prev = head_;
-        for (int i = 0; i < position - 1; i++) { // going to the node just before the insertion point
+        for (int i = 0; i < position - 1; ++i) { // going to the node just before the insertion point
             prev = prev->next;
         }
         Node<T>* fresh = new Node<T>(value);
         fresh->next = prev->next; // linking the new node to the rest of the list first
         prev->next = fresh; // linking the previous node to the new node / splicing it
-        ++size_; // increasing the size of the linked list 
+        ++size_; // increasing the size of the linked list
+    }
+
+    void deleteAnywhere (int position) override {
+        if (position < 0 || position >= size_) {
+            std::cout << "Position out of bounds." << std::endl;
+            return;
+        }
+        if (position == 0) {
+            deleteFront();
+            return;
+        }
+        Node<T>* prev = head_;
+        for (int i = 0; i < position - 1; ++i) {
+            prev = prev->next;
+        }
+        Node<T>* doomed = prev->next; //
+        prev->next = doomed->next; // skipping the doomed node
+
+        if (doomed == tail_) {
+            tail_ = prev; // deleted the last node so tail moves back
+        }
+        delete doomed->data; // free the T
+        delete doomed; // free the node
+        --size_;
     }
 
     void addBack(T* value) override {
