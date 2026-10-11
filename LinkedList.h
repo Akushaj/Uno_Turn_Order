@@ -68,6 +68,20 @@ public:
         --size_;
     }
 
+    void reverse() override {
+        Node<T>* prev = nullptr;
+        Node<T>* current = head_;
+        tail_ = head_; // the old head is the new tail
+
+        while (current != nullptr) {
+            Node<T>* next = current->next;
+            current->next = prev; // pointing this node backward
+            prev = current; // advance prev
+            current = next; // advance current
+        }
+        head_ = prev;
+    }
+
     void addBack(T* value) override {
         Node<T>* fresh = new Node<T>(value);
         if (tail_ == nullptr) {

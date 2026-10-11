@@ -1,4 +1,5 @@
 ## 1. Why does concat only need to work between two lists of the same representation? What would you have to do differently, or what would go wrong, if you tried to make it work between a LinkedList and an ArrayList?
+= concat only works between two lists of same type because other comes in as a type List<T>* which can't see the private data_ or head_. Using dynamic_cast to turn it into a type and if it returns null ptr it will print a message and return. To support both ArrayList and LinkedList together, I would have to move elements one at a time by creating nodes or copying pointers into the array instead of just moving what is already there.
 
 ## 2. Walk through reverse() on your linked list: name the three pointers you need alive at once, and explain why losing track of any one of them mid-loop corrupts the list.
 
