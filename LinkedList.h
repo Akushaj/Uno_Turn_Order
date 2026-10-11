@@ -21,6 +21,29 @@ public:
         ++size_;
     }
 
+    void addAnywhere(int position, T* value) override {
+        if (position < 0 || position > size_) {
+            std::cout << "Position out of bounds." << std::endl;
+            return;
+        }
+        if (position == 0) {
+            addFront(value);
+            return;
+        }
+        if (position == size_) {
+            addBack(value);
+            return;
+        }
+        Node<T>* prev = head_;
+        for (int i = 0; i < position - 1; i++) { // going to the node just before the insertion point
+            prev = prev->next;
+        }
+        Node<T>* fresh = new Node<T>(value);
+        fresh->next = prev->next; // linking the new node to the rest of the list first
+        prev->next = fresh; // linking the previous node to the new node / splicing it
+        ++size_; // increasing the size of the linked list 
+    }
+
     void addBack(T* value) override {
         Node<T>* fresh = new Node<T>(value);
         if (tail_ == nullptr) {
