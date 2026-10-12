@@ -8,7 +8,9 @@
 =  addAnywhere has a valid range of [0, size] because position == size means we need to append right after the last element. For deleteAnywhere the range is [0 , size-1] as there is no element at size to remove and an empty list has no element at all to remove. If the position is outside the range my code prints a message and returns without changing the list. 
 
 ## 4. In LinkedList::concat, why did you need to walk to the end of the list first, when addFront and deleteFront never needed to? What would change about concat’s performance if LinkedList still tracked a tail pointer, and what would you have to keep updated elsewhere if you added one back?
+=  In LinkedList::concat, I had to walk to the last node first because there is no tail pointer that tells me where the end is . That walk takes time of O(n) to complete. If LinkedList still had a tail pointer the time complexity would be O(1) as we could just write tail_->next = src->head_ but I would have to keep tail_ updated in addFront when the list is empty, deleteFront when the list becomes empty, deleteAnywhere for the last node , reverse , and concat as well.
 
 ## 5. Pick either addAnywhere or deleteAnywhere in ArrayList and explain, in your own words, what has to shift and in which direction, and why shifting in the wrong direction would overwrite data you still need.
+= For addAnywhere in ArrayList every element from position onward has to shift one index to the right to make room. So I started at the back (i = size_) down to position ,copying data_[i-1] to data_[i]. If I had shifted from the front instead I would overwrite data_[position + 1] before copying it which would lose that element    
 
 ## 6. Point to the exact line in your main.cpp where a Reverse card actually changes the direction of play, and explain what would visibly break in the game if that call were missing.
