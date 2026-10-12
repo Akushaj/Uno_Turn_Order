@@ -18,12 +18,7 @@ public:
     virtual void deleteAnywhere(int position) = 0;
     virtual void reverse() = 0;
     virtual void concat(List<T>* other) = 0;
-
-    // New for this lab.
-    virtual void addBack(T* value) = 0;    // add at the end, list owns value
-    virtual T* getFront() const = 0;       // look at the first item, nullptr if empty
-    virtual bool isEmpty() const = 0;
-    virtual int size() const = 0;
+    
 };
 
 #include "ArrayList.h"
