@@ -18,7 +18,7 @@ public:
     virtual void deleteAnywhere(int position) = 0;
     virtual void reverse() = 0;
     virtual void concat(List<T>* other) = 0;
-    
+
 };
 
 #include "ArrayList.h"
@@ -26,6 +26,6 @@ public:
 
 template <typename T>
 std::unique_ptr<List<T>> makeList() {
-    return std::make_unique<LinkedList<T>>();
-    // return std::make_unique<ArrayList<T>>();
+     return std::make_unique<LinkedList<T>>();
+    //return std::make_unique<ArrayList<T>>();
 }

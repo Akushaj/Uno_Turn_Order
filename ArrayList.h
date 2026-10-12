@@ -37,14 +37,6 @@ public:
         size_++; // increases the array size
     }
 
-    void addBack(T* value) override {
-        if (size_ >= CAPACITY) {
-            std::cout << "ArrayList is full." << std::endl;
-            return;
-        }
-        data_[size_] = value;       // no shifting needed at the back
-        ++size_;
-    }
 
     void deleteFront() override {
         if (size_ == 0) {
@@ -103,21 +95,6 @@ public:
         src->size_ = 0; // making the size of other 0
     }
 
-    T* getFront() const override {
-        if (size_ == 0) {
-            return nullptr;
-        }
-        return data_[0];
-    }
-
-
-    bool isEmpty() const override {
-        return size_ == 0;
-    }
-
-    int size() const override {
-        return size_;
-    }
 
     bool search(T* value) const override {
         for (int i = 0; i < size_; ++i) {
