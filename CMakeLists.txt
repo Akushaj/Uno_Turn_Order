@@ -14,4 +14,5 @@ add_executable(Uno_Turn_Order
         Player.h
         Stack.h
         Player.h
+        Card.h
 )
