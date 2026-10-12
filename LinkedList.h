@@ -3,37 +3,41 @@
 #include "Node.h"
 #include "List.h"
 
-// Solution file. Lab 3's LinkedList plus addBack, getFront, isEmpty, size.
-// tail_ is back so addBack is O(1). size_ is new so size() is O(1).
 
-template <typename T>
+template<typename T>
 class LinkedList : public List<T> {
 public:
-    LinkedList() : head_(nullptr), tail_(nullptr), size_(0) {}
+    LinkedList() : head_(nullptr), size_(0) {}
 
     void addFront(T* value) override {
         Node<T>* fresh = new Node<T>(value);
         fresh->next = head_;
         head_ = fresh;
-        if (tail_ == nullptr) {
-            tail_ = fresh;          // first node is both head and tail
-        }
         ++size_;
+    }
+
+    void deleteFront() override {
+        if (head_ == nullptr) {
+            std::cout << "LinkedList is empty" << std::endl;
+            return;
+        }
+        Node<T>* doomed = head_;
+        head_ = head_->next;
+        delete doomed->data;
+        delete doomed;
+        --size_;                                  // new
     }
 
     void addAnywhere(int position, T* value) override {
         if (position < 0 || position > size_) {
-            std::cout << "Position out of bounds." << std::endl;
+            std::cout << "The position is out of range." << std::endl;
             return;
         }
         if (position == 0) {
             addFront(value);
             return;
         }
-        if (position == size_) {
-            addBack(value);
-            return;
-        }
+
         Node<T>* prev = head_;
         for (int i = 0; i < position - 1; ++i) { // going to the node just before the insertion point
             prev = prev->next;
@@ -44,7 +48,7 @@ public:
         ++size_; // increasing the size of the linked list
     }
 
-    void deleteAnywhere (int position) override {
+    void deleteAnywhere(int position) override {
         if (position < 0 || position >= size_) {
             std::cout << "Position out of bounds." << std::endl;
             return;
@@ -57,13 +61,9 @@ public:
         for (int i = 0; i < position - 1; ++i) {
             prev = prev->next;
         }
-        Node<T>* doomed = prev->next; //
+        Node<T>* doomed = prev->next;
         prev->next = doomed->next; // skipping the doomed node
-
-        if (doomed == tail_) {
-            tail_ = prev; // deleted the last node so tail moves back
-        }
-        delete doomed->data; // free the T
+        delete doomed->data;  // free the T
         delete doomed; // free the node
         --size_;
     }
@@ -71,90 +71,42 @@ public:
     void reverse() override {
         Node<T>* prev = nullptr;
         Node<T>* current = head_;
-        tail_ = head_; // the old head is the new tail
-
         while (current != nullptr) {
-            Node<T>* next = current->next;
-            current->next = prev; // pointing this node backward
-            prev = current; // advance prev
-            current = next; // advance current
+            Node<T>* next = current->next;        // save the rest
+            current->next = prev;                 // flip backward
+            prev = current;
+            current = next;
         }
-        head_ = prev;
+        head_ = prev;                             // old last node is the new head
     }
 
     void concat(List<T>* other) override {
         LinkedList<T>* src = dynamic_cast<LinkedList<T>*>(other);
-
         if (src == nullptr) {
             std::cout << "Type mismatch in concat." << std::endl;
             return;
         }
-
         if (src->head_ == nullptr) {
-            return;
+            return;                               // nothing to attach
         }
-        
         if (head_ == nullptr) {
-            head_ = src->head_;
-        }else {
-            tail_->next = src->head_;
-        }
-        tail_ = src->tail_;
-        size_ += src->size_;
-        src->head_ = nullptr;
-        src->tail_ = nullptr;
-        src->size_ = 0;
-
-    }
-
-    void addBack(T* value) override {
-        Node<T>* fresh = new Node<T>(value);
-        if (tail_ == nullptr) {
-            head_ = fresh;          // first node is both head and tail
-            tail_ = fresh;
+            head_ = src->head_;                   // this is empty, take over
         } else {
-            tail_->next = fresh;
-            tail_ = fresh;
+            Node<T>* last = head_;                // no tail, so walk to the end: O(n)
+            while (last->next != nullptr) {
+                last = last->next;
+            }
+            last->next = src->head_;
         }
-        ++size_;
-    }
-
-    void deleteFront() override {
-        if (head_ == nullptr) {
-            std::cout << "LinkedList is empty." << std::endl;
-            return;
-        }
-        Node<T>* doomed = head_;
-        head_ = head_->next;
-        if (head_ == nullptr) {
-            tail_ = nullptr;        // list is empty again
-        }
-        delete doomed->data;
-        delete doomed;
-        --size_;
-    }
-
-    T* getFront() const override {
-        if (head_ == nullptr) {
-            return nullptr;
-        }
-        return head_->data;
-    }
-
-    bool isEmpty() const override {
-        return head_ == nullptr;
-    }
-
-    int size() const override {
-        return size_;
+        size_ += src->size_;
+        src->head_ = nullptr;                     // ownership moved
+        src->size_ = 0;
     }
 
     bool search(T* value) const override {
         Node<T>* current = head_;
         while (current != nullptr) {
-            if (*current->data == *value) {
-                return true;
-            }
+            if (*current->data == *value) return true;
             current = current->next;
         }
         return false;
@@ -180,6 +132,5 @@ public:
 
 private:
     Node<T>* head_;
-    Node<T>* tail_;
     int size_;
 };
